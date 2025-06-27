@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -13,7 +14,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+        $invoices = Invoice::all();
+        return view('invoices.index', compact('invoices'));
     }
 
     /**
@@ -53,7 +55,12 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $invoice->update([
+            'status' => 1,
+            'paid_by' => Auth::id(),
+            'paid_at' => now(),
+        ]);
+        return redirect()->route('invoices.index')->with('success', 'Đã thanh toán hoá đơn.');
     }
 
     /**

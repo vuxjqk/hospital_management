@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patient;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
@@ -46,7 +47,7 @@ class PatientController extends Controller
      */
     public function edit(Patient $patient)
     {
-        //
+        return view('patients.edit', compact('patient'));
     }
 
     /**
@@ -54,7 +55,11 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $patient)
     {
-        //
+        $patient->update(array_merge(
+            $request->all(),
+            ['updated_by' => Auth::id()]
+        ));
+        return redirect()->route('appointments.index')->with('success', 'Bệnh nhân đã được cập nhật.');
     }
 
     /**

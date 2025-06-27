@@ -14,4 +14,9 @@ class Invoice extends Model
         'paid_at',
         'created_by',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
 }

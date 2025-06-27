@@ -50,7 +50,7 @@ class SpecialtyController extends Controller
      */
     public function edit(Specialty $specialty)
     {
-        //
+        return view('specialties.edit', compact('specialty'));
     }
 
     /**
@@ -58,7 +58,13 @@ class SpecialtyController extends Controller
      */
     public function update(Request $request, Specialty $specialty)
     {
-        //
+        $specialty->update([
+            'name' => $request->name,
+            'fee' => $request->fee,
+            'status' => $request->has('status'),
+        ]);
+
+        return redirect()->route('specialties.index')->with('success', 'Cập nhật chuyên khoa thành công.');
     }
 
     /**

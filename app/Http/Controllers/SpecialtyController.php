@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Specialty;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class SpecialtyController extends Controller
@@ -64,7 +65,7 @@ class SpecialtyController extends Controller
             'status' => $request->has('status'),
         ]);
 
-        return redirect()->route('specialties.index')->with('success', 'Cập nhật chuyên khoa thành công.');
+        return redirect()->route('specialties.index')->with('success', 'Chuyên khoa đã được cập nhật.');
     }
 
     /**
@@ -72,6 +73,17 @@ class SpecialtyController extends Controller
      */
     public function destroy(Specialty $specialty)
     {
-        //
+        try {
+            $specialty->delete();
+            return redirect()->route('specialties.index')->with('success', 'Chuyên khoa đã được xóa.');
+        } catch (QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return redirect()->route('specialties.index')
+                    ->with('error', 'Không thể xóa chuyên khoa này vì đang được sử dụng ở nơi khác.');
+            }
+
+            return redirect()->route('specialties.index')
+                ->with('error', 'Đã xảy ra lỗi khi xóa chuyên khoa.');
+        }
     }
 }

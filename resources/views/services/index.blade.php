@@ -10,8 +10,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-white">{{ __('Quản lý chuyên khoa') }}</h2>
-                        <p class="text-blue-100 text-sm mt-1">Quản lý thông tin các chuyên khoa trong bệnh viện</p>
+                        <h2 class="text-2xl font-bold text-white">{{ __('Quản lý dịch vụ') }}</h2>
+                        <p class="text-blue-100 text-sm mt-1">Quản lý thông tin các dịch vụ trong bệnh viện</p>
                     </div>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Tổng chuyên khoa</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ $specialties->total() ?? 0 }}</p>
+                            <p class="text-sm font-medium text-gray-600">Tổng dịch vụ</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ $services->total() ?? 0 }}</p>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600">Đang hoạt động</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $specialties->where('status', 1)->count() ?? 0 }}</p>
+                                {{ $services->where('status', 1)->count() ?? 0 }}</p>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600">Tạm ngưng</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $specialties->where('status', 0)->count() ?? 0 }}</p>
+                                {{ $services->where('status', 0)->count() ?? 0 }}</p>
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                 <div class="p-6 border-b border-gray-100">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Danh sách chuyên khoa</h3>
-                            <p class="text-sm text-gray-600 mt-1">Quản lý và cập nhật thông tin các chuyên khoa</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Danh sách dịch vụ</h3>
+                            <p class="text-sm text-gray-600 mt-1">Quản lý và cập nhật thông tin các dịch vụ</p>
                         </div>
 
                         <button type="button"
@@ -89,12 +89,12 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            Thêm chuyên khoa
+                            Thêm dịch vụ
                         </button>
                     </div>
 
                     <!-- Search Form -->
-                    <form method="GET" action="{{ route('specialties.index') }}" class="mt-6">
+                    <form method="GET" action="{{ route('services.index') }}" class="mt-6">
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="flex-1">
                                 <div class="relative">
@@ -107,7 +107,7 @@
                                     </div>
                                     <input type="search" name="search"
                                         class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                        placeholder="Tìm kiếm theo tên chuyên khoa..." value="{{ $search }}">
+                                        placeholder="Tìm kiếm theo tên dịch vụ..." value="{{ $search }}">
                                 </div>
                             </div>
                             <button type="submit"
@@ -152,11 +152,11 @@
                             <tr>
                                 <th scope="col"
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Tên chuyên khoa
+                                    Tên dịch vụ
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Phí khám
+                                    Phí dịch vụ
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -169,7 +169,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($specialties as $specialty)
+                            @forelse ($services as $service)
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -182,18 +182,18 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-semibold text-gray-900">{{ $specialty->name }}
+                                                <div class="text-sm font-semibold text-gray-900">{{ $service->name }}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-semibold text-gray-900">
-                                            {{ number_format($specialty->fee, 0, ',', '.') }} VNĐ
+                                            {{ number_format($service->fee, 0, ',', '.') }} VNĐ
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($specialty->status)
+                                        @if ($service->status)
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
@@ -209,7 +209,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <div class="flex items-center space-x-2">
-                                            <a href="{{ route('specialties.edit', $specialty) }}"
+                                            <a href="{{ route('services.edit', $service) }}"
                                                 class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors duration-200">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -219,11 +219,11 @@
                                                 </svg>
                                                 Sửa
                                             </a>
-                                            <form action="{{ route('specialties.destroy', $specialty) }}"
-                                                method="POST" style="display:inline;">
+                                            <form action="{{ route('services.destroy', $service) }}" method="POST"
+                                                style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button onclick="return confirm('Xóa chuyên khoa này?')"
+                                                <button onclick="return confirm('Xóa dịch vụ này?')"
                                                     class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors duration-200">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -246,9 +246,9 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                                                     d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                             </svg>
-                                            <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có chuyên khoa nào
+                                            <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có dịch vụ nào
                                             </h3>
-                                            <p class="text-gray-500 mb-4">Bắt đầu bằng cách thêm chuyên khoa đầu tiên
+                                            <p class="text-gray-500 mb-4">Bắt đầu bằng cách thêm dịch vụ đầu tiên
                                             </p>
                                             <button type="button"
                                                 class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
@@ -258,7 +258,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                                 </svg>
-                                                Thêm chuyên khoa
+                                                Thêm dịch vụ
                                             </button>
                                         </div>
                                     </td>
@@ -269,20 +269,20 @@
                 </div>
 
                 <!-- Pagination -->
-                @if ($specialties->hasPages())
+                @if ($services->hasPages())
                     <div class="px-6 py-4 border-t border-gray-200">
-                        {{ $specialties->links() }}
+                        {{ $services->links() }}
                     </div>
                 @endif
             </div>
         </div>
     </div>
 
-    <!-- Add Specialty Modal -->
+    <!-- Add service Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form action="{{ route('specialties.store') }}" method="POST">
+            <form action="{{ route('services.store') }}" method="POST">
                 <div class="modal-content border-0 shadow-xl">
                     <div class="modal-header bg-gradient-to-r from-blue-600 to-blue-700 text-white border-0">
                         <div class="flex items-center">
@@ -293,9 +293,9 @@
                                 </svg>
                             </div>
                             <div>
-                                <h1 class="modal-title fs-5 font-semibold" id="staticBackdropLabel">Thêm chuyên khoa
+                                <h1 class="modal-title fs-5 font-semibold" id="staticBackdropLabel">Thêm dịch vụ
                                     mới</h1>
-                                <p class="text-blue-100 text-sm mt-1">Nhập thông tin chi tiết cho chuyên khoa</p>
+                                <p class="text-blue-100 text-sm mt-1">Nhập thông tin chi tiết cho dịch vụ</p>
                             </div>
                         </div>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -314,14 +314,14 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                         </svg>
-                                        Tên chuyên khoa
+                                        Tên dịch vụ
                                     </span>
                                 </label>
                                 <input type="text"
                                     class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                     id="name" name="name"
-                                    placeholder="Ví dụ: Nội tổng quát, Tim mạch, Nhi khoa..." required>
-                                <p class="mt-2 text-sm text-gray-500">Nhập tên đầy đủ của chuyên khoa</p>
+                                    placeholder="Ví dụ: Chụp X-quang, Siêu âm tim, Xét nghiệm máu" required>
+                                <p class="mt-2 text-sm text-gray-500">Nhập tên đầy đủ của dịch vụ</p>
                             </div>
 
                             <div>
@@ -332,7 +332,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                                         </svg>
-                                        Phí khám (VNĐ)
+                                        Phí dịch vụ (VNĐ)
                                     </span>
                                 </label>
                                 <div class="relative">
@@ -344,7 +344,7 @@
                                         <span class="text-gray-500 text-sm font-medium">VNĐ</span>
                                     </div>
                                 </div>
-                                <p class="mt-2 text-sm text-gray-500">Nhập phí khám cho chuyên khoa này</p>
+                                <p class="mt-2 text-sm text-gray-500">Nhập phí dịch vụ cho dịch vụ này</p>
                             </div>
 
                             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -357,7 +357,7 @@
                                     <div>
                                         <h4 class="text-sm font-medium text-blue-800">Lưu ý</h4>
                                         <p class="mt-1 text-sm text-blue-700">
-                                            Chuyên khoa mới sẽ được kích hoạt tự động và có thể được sử dụng ngay sau
+                                            Dịch vụ mới sẽ được kích hoạt tự động và có thể được sử dụng ngay sau
                                             khi tạo.
                                         </p>
                                     </div>
@@ -379,7 +379,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7" />
                                 </svg>
-                                Lưu chuyên khoa
+                                Lưu dịch vụ
                             </span>
                         </button>
                     </div>

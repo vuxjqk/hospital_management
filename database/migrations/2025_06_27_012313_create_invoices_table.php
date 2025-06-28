@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
-            $table->decimal('total_amount')->default(0);
+            $table->unsignedBigInteger('total_amount')->default(0);
             $table->boolean('status')->default(false);
             $table->foreignId('paid_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->dateTime('paid_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SpecialtyController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('specialties', SpecialtyController::class);
     Route::resource('invoices', InvoiceController::class);
     Route::resource('patients', PatientController::class);
+    Route::resource('services', ServiceController::class);
+    Route::resource('examinations', ExaminationController::class);
 });
 
 require __DIR__ . '/auth.php';

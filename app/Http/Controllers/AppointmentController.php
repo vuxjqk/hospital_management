@@ -16,12 +16,19 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
+        $patients = Patient::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%");
+        })->paginate(10);
+
+        $appointments = Appointment::paginate(10);
+
         $specialties = Specialty::all();
-        $patients = Patient::all();
-        $appointments = Appointment::all();
-        return view('appointments.index', compact('patients', 'appointments', 'specialties'));
+
+        return view('appointments.index', compact('patients', 'appointments', 'specialties', 'search'));
     }
 
     /**
@@ -80,7 +87,7 @@ class AppointmentController extends Controller
             'total_amount' => $specialty->fee,
         ]);
 
-        return redirect()->route('appointments.index')->with('success', 'Lịch khám đã được thêm.');
+        return redirect()->route('patients.index')->with('success', 'Lịch khám đã được thêm.');
     }
 
     /**

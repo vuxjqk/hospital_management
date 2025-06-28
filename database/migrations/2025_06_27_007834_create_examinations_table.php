@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specialties', function (Blueprint $table) {
+        Schema::create('examinations', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->unsignedBigInteger('fee');
-            $table->boolean('status')->default(true);
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->constrained();
+            $table->string('symptoms', 255)->nullable();
+            $table->string('diagnosis', 255)->nullable();
+            $table->string('note', 255)->nullable();
+            $table->timestamp('examined_at');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specialties');
+        Schema::dropIfExists('examinations');
     }
 };

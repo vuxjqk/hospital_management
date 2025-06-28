@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('cascade');
-            $table->foreignId('specialty_id')->constrained();
-            $table->unsignedTinyInteger('queue_number');
-            $table->boolean('has_insurance')->default(false);
-            $table->foreignId('examinations')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('examination_id')->constrained()->onDelete('cascade');
+            $table->foreignId('service_id')->constrained();
+            $table->string('name', 100)->unique();
+            $table->unsignedBigInteger('fee');
+            $table->boolean('status')->default(true);
+            $table->string('result_file');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appointments');
+        Schema::dropIfExists('service_requests');
     }
 };

@@ -60,7 +60,7 @@
                             Thêm Bệnh Nhân Mới
                         </button>
 
-                        <form method="GET" action="{{ route('appointments.index') }}" class="mt-6">
+                        <form method="GET" action="{{ route('patients.index') }}" class="mt-6">
                             <div class="flex flex-col sm:flex-row">
                                 <div class="flex-1">
                                     <div class="relative">
@@ -93,7 +93,7 @@
                                     data-bs-toggle="modal" data-bs-target="#exampleModal"
                                     data-patient-id="{{ $patient->id }}">
                                     <div class="flex justify-between items-start mb-2">
-                                        <h5 class="font-semibold text-gray-900 text-base">{{ $patient->name }}</h5>
+                                        <h5 class="font-semibold text-gray-900 text-base">{{ $patient->full_name }}</h5>
                                         <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">3 ngày
                                             trước</span>
                                     </div>
@@ -198,13 +198,13 @@
                                                     <div
                                                         class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
                                                         <span class="text-sm font-medium text-white">
-                                                            {{ substr($appointment->patient->name, 0, 1) }}
+                                                            {{ substr($appointment->patient->full_name, 0, 1) }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        {{ $appointment->patient->name }}
+                                                        {{ $appointment->patient->full_name }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -286,7 +286,7 @@
                                 <label for="name" class="form-label font-medium text-gray-700">Họ và Tên *</label>
                                 <input type="text"
                                     class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="name" name="name" required>
+                                    id="name" name="full_name" required>
                             </div>
 
                             <div class="col-md-6">
@@ -309,25 +309,25 @@
                             </div>
 
                             <div class="col-12">
-                                <label for="address" class="form-label font-medium text-gray-700">Địa Chỉ *</label>
+                                <label for="address" class="form-label font-medium text-gray-700">Địa Chỉ</label>
                                 <textarea class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500" id="address"
-                                    name="address" rows="3" required></textarea>
+                                    name="address" rows="3"></textarea>
                             </div>
 
                             <div class="col-md-6">
-                                <label for="insurance_number" class="form-label font-medium text-gray-700">Số Bảo Hiểm
-                                    *</label>
+                                <label for="insurance_number" class="form-label font-medium text-gray-700">Số Bảo
+                                    Hiểm</label>
                                 <input type="text"
                                     class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_number" name="insurance_number" required>
+                                    id="insurance_number" name="insurance_number">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="insurance_expiry_date" class="form-label font-medium text-gray-700">Ngày
-                                    Hết Hạn BH *</label>
+                                    Hết Hạn BH</label>
                                 <input type="date"
                                     class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_expiry_date" name="insurance_expiry_date" required>
+                                    id="insurance_expiry_date" name="insurance_expiry_date">
                             </div>
                         </div>
                     </div>

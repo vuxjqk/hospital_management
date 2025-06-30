@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
-            $table->foreignId('specialty_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('license_number', 20)->nullable()->unique();
-            $table->unsignedTinyInteger('years_of_experience')->nullable();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('specialty_id')->constrained();
+            $table->string('license_number', 20)->unique();
+            $table->unsignedTinyInteger('years_of_experience')->default(0);
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

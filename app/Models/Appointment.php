@@ -11,7 +11,7 @@ class Appointment extends Model
         'specialty_id',
         'queue_number',
         'has_insurance',
-        'created_by'
+        'updated_by'
     ];
 
     public function patient()

@@ -9,7 +9,7 @@ class Specialty extends Model
     protected $fillable = [
         'name',
         'fee',
-        'status',
+        'is_active',
         'updated_by',
     ];
 }

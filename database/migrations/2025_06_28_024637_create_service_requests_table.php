@@ -14,12 +14,8 @@ return new class extends Migration
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('examination_id')->constrained()->onDelete('cascade');
-            $table->foreignId('service_id')->constrained();
-            $table->string('name', 100)->unique();
-            $table->unsignedBigInteger('fee');
-            $table->boolean('status')->default(true);
-            $table->string('result_file');
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('service_category_id')->constrained();
+            $table->text('reason')->nullable();
             $table->timestamps();
         });
     }

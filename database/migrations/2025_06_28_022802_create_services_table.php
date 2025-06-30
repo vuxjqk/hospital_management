@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('service_category_id')->constrained();
             $table->string('name', 100)->unique();
-            $table->unsignedBigInteger('fee');
-            $table->boolean('status')->default(true);
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->unsignedBigInteger('fee')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

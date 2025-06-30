@@ -62,7 +62,7 @@ class SpecialtyController extends Controller
         $specialty->update([
             'name' => $request->name,
             'fee' => $request->fee,
-            'status' => $request->has('status'),
+            'is_active' => $request->has('is_active'),
         ]);
 
         return redirect()->route('specialties.index')->with('success', 'Chuyên khoa đã được cập nhật.');

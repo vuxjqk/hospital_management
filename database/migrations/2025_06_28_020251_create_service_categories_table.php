@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('medicines', function (Blueprint $table) {
+        Schema::create('service_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medicine_category_id')->constrained();
             $table->string('name', 100)->unique();
-            $table->unsignedBigInteger('price');
-            $table->string('unit', 10);
-            $table->unsignedInteger('stock_quantity')->default(0);
-            $table->date('expiry_date')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('medicines');
+        Schema::dropIfExists('service_categories');
     }
 };

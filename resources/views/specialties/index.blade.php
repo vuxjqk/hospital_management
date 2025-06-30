@@ -49,7 +49,7 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600">Đang hoạt động</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $specialties->where('status', 1)->count() ?? 0 }}</p>
+                                {{ $specialties->where('is_active', 1)->count() ?? 0 }}</p>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600">Tạm ngưng</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $specialties->where('status', 0)->count() ?? 0 }}</p>
+                                {{ $specialties->where('is_active', 0)->count() ?? 0 }}</p>
                         </div>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($specialty->status)
+                                        @if ($specialty->is_active)
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>

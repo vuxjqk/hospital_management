@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice_details', function (Blueprint $table) {
+        Schema::create('prescription_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
-            $table->string('item_type', 100);
-            $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('unit_price');
+            $table->foreignId('prescription_id')->constrained()->onDelete('cascade');
+            $table->foreignId('medicine_id')->constrained();
             $table->unsignedTinyInteger('quantity');
+            $table->text('dosage');
+            $table->unsignedBigInteger('unit_price');
             $table->unsignedBigInteger('total_price');
+            $table->unique(['prescription_id', 'medicine_id']);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoice_details');
+        Schema::dropIfExists('prescription_details');
     }
 };

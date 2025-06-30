@@ -10,7 +10,7 @@ class Doctor extends Model
         'user_id',
         'specialty_id',
         'license_number',
-        'experience_years',
+        'years_of_experience',
         'updated_by',
     ];
 }

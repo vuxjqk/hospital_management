@@ -10,6 +10,7 @@ class Examination extends Model
         'user_id',
         'symptoms',
         'diagnosis',
+        'treatment',
         'note',
         'examined_at',
     ];

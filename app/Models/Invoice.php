@@ -12,7 +12,7 @@ class Invoice extends Model
         'status',
         'paid_by',
         'paid_at',
-        'created_by',
+        'updated_by',
     ];
 
     public function patient()

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('specialty_id')->constrained();
             $table->unsignedTinyInteger('queue_number');
             $table->boolean('has_insurance')->default(false);
-            $table->foreignId('examinations')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('examinations')->nullable()->unique()->constrained()->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

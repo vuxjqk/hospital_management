@@ -19,7 +19,7 @@ class PatientController extends Controller
         $search = $request->input('search');
 
         $patients = Patient::when($search, function ($query, $search) {
-            return $query->where('name', 'like', "%{$search}%");
+            return $query->where('full_name', 'like', "%{$search}%");
         })->paginate(10);
 
         $appointments = Appointment::paginate(10);

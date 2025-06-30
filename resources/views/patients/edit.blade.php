@@ -28,9 +28,9 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1">Tên</label>
-                            <input type="text" name="name"
+                            <input type="text" name="full_name"
                                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                value="{{ $patient->name }}" required>
+                                value="{{ $patient->full_name }}" required>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1">Ngày sinh</label>
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="flex items-center justify-end gap-4 pt-4 border-t mt-8">
-                        <a href="{{ route('appointments.index') }}"
+                        <a href="{{ route('patients.index') }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-md transition">Hủy</a>
                         <button type="submit"
                             class="inline-flex items-center px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow transition">

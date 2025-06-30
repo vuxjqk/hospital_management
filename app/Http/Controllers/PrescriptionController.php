@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ServiceRequest;
+use App\Models\Prescription;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ServiceRequestController extends Controller
+class PrescriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class ServiceRequestController extends Controller
      */
     public function create()
     {
-        return view('Services.create', compact('service'));
+        //
     }
 
     /**
@@ -29,17 +29,13 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
-        ServiceRequest::create([
-            'examination_id' => $request->examination_id,
-
-        ]);
-        return redirect()->route('specialties.index')->with('success', 'Chuyên khoa đã được thêm.');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ServiceRequest $serviceRequest)
+    public function show(Prescription $prescription)
     {
         //
     }
@@ -47,7 +43,7 @@ class ServiceRequestController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ServiceRequest $serviceRequest)
+    public function edit(Prescription $prescription)
     {
         //
     }
@@ -55,7 +51,7 @@ class ServiceRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ServiceRequest $serviceRequest)
+    public function update(Request $request, Prescription $prescription)
     {
         //
     }
@@ -63,7 +59,7 @@ class ServiceRequestController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServiceRequest $serviceRequest)
+    public function destroy(Prescription $prescription)
     {
         //
     }

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('total_amount')->default(0);
-            $table->boolean('status')->default(false);
-            $table->foreignId('paid_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->enum('status', ['unpaid', 'paid', 'cancelled'])->default('unpaid');
+            $table->foreignId('paid_by')->nullable()->constrained('users');
             $table->timestamp('paid_at')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

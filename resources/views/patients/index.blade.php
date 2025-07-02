@@ -50,15 +50,14 @@
                             </svg>
                             Danh Sách Bệnh Nhân
                         </h3>
-                        <button type="button"
-                            class="mt-3 bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-200 flex items-center text-sm"
-                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <a href="{{ route('patients.create') }}"
+                            class="mt-3 bg-white text-indigo-700 no-underline px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-200 flex items-center text-sm hover:no-underline">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                             Thêm Bệnh Nhân Mới
-                        </button>
+                        </a>
 
                         <form method="GET" action="{{ route('patients.index') }}" class="mt-6">
                             <div class="flex flex-col sm:flex-row">
@@ -252,102 +251,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Add Patient Modal -->
-    <form action="{{ route('patients.store') }}" method="POST">
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                <div class="modal-content border-0 shadow-2xl">
-                    <div class="modal-header bg-gradient-to-r from-blue-600 to-blue-700 text-white border-0">
-                        <h1 class="modal-title fs-5 font-semibold flex items-center" id="staticBackdropLabel">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                            </svg>
-                            Thêm Bệnh Nhân Mới
-                        </h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-6">
-                        @csrf
-
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label for="national_id" class="form-label font-medium text-gray-700">CMND/CCCD
-                                    *</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="national_id" name="national_id" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="name" class="form-label font-medium text-gray-700">Họ và Tên *</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="name" name="full_name" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="date_of_birth" class="form-label font-medium text-gray-700">Ngày Sinh
-                                    *</label>
-                                <input type="date"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="date_of_birth" name="date_of_birth" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="gender" class="form-label font-medium text-gray-700">Giới Tính *</label>
-                                <select class="form-select border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="gender" name="gender" required>
-                                    <option value="">Chọn giới tính</option>
-                                    <option value="male">Nam</option>
-                                    <option value="female">Nữ</option>
-                                    <option value="other">Khác</option>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="address" class="form-label font-medium text-gray-700">Địa Chỉ</label>
-                                <textarea class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500" id="address"
-                                    name="address" rows="3"></textarea>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="insurance_number" class="form-label font-medium text-gray-700">Số Bảo
-                                    Hiểm</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_number" name="insurance_number">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="insurance_expiry_date" class="form-label font-medium text-gray-700">Ngày
-                                    Hết Hạn BH</label>
-                                <input type="date"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_expiry_date" name="insurance_expiry_date">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-gray-50 border-0">
-                        <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
-                            data-bs-dismiss="modal">
-                            Hủy Bỏ
-                        </button>
-                        <button type="submit" class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            Thêm Bệnh Nhân
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 
     <!-- Add Appointment Modal -->
     <form action="{{ route('appointments.store') }}" method="POST">

@@ -10,20 +10,13 @@
                 </div>
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">
-                        Chỉnh sửa thông tin bệnh nhân
+                        Thêm mới bệnh nhân
                     </h2>
                     <p class="text-sm text-gray-600 mt-1">
-                        Cập nhật và quản lý hồ sơ bệnh nhân một cách chi tiết
+                        Tạo và quản lý hồ sơ bệnh nhân một cách chi tiết
                     </p>
                 </div>
             </div>
-            <nav class="text-sm text-gray-500">
-                <a href="{{ route('dashboard') }}" class="hover:text-blue-600 transition-colors">Dashboard</a>
-                <span class="mx-2">•</span>
-                <a href="{{ route('patients.index') }}" class="hover:text-blue-600 transition-colors">Bệnh nhân</a>
-                <span class="mx-2">•</span>
-                <span class="text-gray-800">Chỉnh sửa</span>
-            </nav>
             <div class="flex items-center gap-2">
                 <span
                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -32,7 +25,7 @@
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    Đang hoạt động
+                    Mới
                 </span>
             </div>
         </div>
@@ -82,10 +75,8 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('patients.update', $patient) }}" enctype="multipart/form-data"
-                class="space-y-8">
+            <form method="POST" action="{{ route('patients.store') }}" enctype="multipart/form-data" class="space-y-8">
                 @csrf
-                @method('PUT')
 
                 <!-- Personal Information Card -->
                 <div class="bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
@@ -106,20 +97,15 @@
                             <div class="relative inline-block">
                                 <div
                                     class="w-24 h-24 rounded-full bg-gray-200 border-4 border-white shadow-lg overflow-hidden mx-auto">
-                                    @if ($patient->profile_picture)
-                                        <img src="{{ asset('storage/' . $patient->profile_picture) }}" alt="Profile"
-                                            class="w-full h-full object-cover">
-                                    @else
-                                        <div
-                                            class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600">
-                                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                    @endif
+                                    <div
+                                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600">
+                                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
                                 </div>
                                 <label for="profile_picture"
                                     class="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition shadow-lg">
@@ -135,7 +121,7 @@
                                 <input type="file" name="profile_picture" id="profile_picture" class="hidden"
                                     accept="image/*">
                             </div>
-                            <p class="text-sm text-gray-500 mt-2">Nhấn vào biểu tượng máy ảnh để thay đổi ảnh đại diện
+                            <p class="text-sm text-gray-500 mt-2">Nhấn vào biểu tượng máy ảnh để thêm ảnh đại diện
                             </p>
                         </div>
 
@@ -153,8 +139,7 @@
                                 </label>
                                 <input type="text" name="national_id" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('national_id', $patient->national_id) }}"
-                                    placeholder="Nhập số căn cước công dân">
+                                    value="{{ old('national_id') }}" placeholder="Nhập số căn cước công dân">
                                 @error('national_id')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -173,8 +158,7 @@
                                 </label>
                                 <input type="text" name="full_name" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('full_name', $patient->full_name) }}"
-                                    placeholder="Nhập họ và tên đầy đủ">
+                                    value="{{ old('full_name') }}" placeholder="Nhập họ và tên đầy đủ">
                                 @error('full_name')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -193,8 +177,7 @@
                                 </label>
                                 <input type="tel" name="phone_number"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('phone_number', $patient->phone_number) }}"
-                                    placeholder="Nhập số điện thoại">
+                                    value="{{ old('phone_number') }}" placeholder="Nhập số điện thoại">
                                 @error('phone_number')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -213,7 +196,7 @@
                                 </label>
                                 <input type="email" name="email"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('email', $patient->email) }}" placeholder="Nhập địa chỉ email">
+                                    value="{{ old('email') }}" placeholder="Nhập địa chỉ email">
                                 @error('email')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -232,7 +215,7 @@
                                 </label>
                                 <input type="date" name="date_of_birth"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('date_of_birth', $patient->date_of_birth) }}">
+                                    value="{{ old('date_of_birth') }}">
                                 @error('date_of_birth')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -252,12 +235,11 @@
                                 <select name="gender"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white">
                                     <option value="">Chọn giới tính</option>
-                                    <option value="male"
-                                        {{ old('gender', $patient->gender) == 'male' ? 'selected' : '' }}>Nam</option>
-                                    <option value="female"
-                                        {{ old('gender', $patient->gender) == 'female' ? 'selected' : '' }}>Nữ</option>
-                                    <option value="other"
-                                        {{ old('gender', $patient->gender) == 'other' ? 'selected' : '' }}>Khác
+                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Nam
+                                    </option>
+                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Nữ
+                                    </option>
+                                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Khác
                                     </option>
                                 </select>
                                 @error('gender')
@@ -280,7 +262,7 @@
                                 </label>
                                 <textarea name="address" rows="3"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-gray-50 focus:bg-white resize-none"
-                                    placeholder="Nhập địa chỉ đầy đủ">{{ old('address', $patient->address) }}</textarea>
+                                    placeholder="Nhập địa chỉ đầy đủ">{{ old('address') }}</textarea>
                                 @error('address')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -318,8 +300,7 @@
                                 </label>
                                 <input type="text" name="insurance_number"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('insurance_number', $patient->insurance_number) }}"
-                                    placeholder="Nhập số thẻ bảo hiểm y tế">
+                                    value="{{ old('insurance_number') }}" placeholder="Nhập số thẻ bảo hiểm y tế">
                                 @error('insurance_number')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
@@ -338,37 +319,16 @@
                                 </label>
                                 <input type="date" name="insurance_expiry_date"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                    value="{{ old('insurance_expiry_date', $patient->insurance_expiry_date) }}">
+                                    value="{{ old('insurance_expiry_date') }}">
                                 @error('insurance_expiry_date')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
-
-                        <!-- Insurance Status Display -->
-                        @if ($patient->insurance_number && $patient->insurance_expiry_date)
-                            <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <div>
-                                        <p class="text-sm font-medium text-green-800">Bảo hiểm y tế đã được đăng ký</p>
-                                        <p class="text-xs text-green-600">
-                                            Thẻ BHYT: {{ $patient->insurance_number }} -
-                                            Hết hạn:
-                                            {{ \Carbon\Carbon::parse($patient->insurance_expiry_date)->format('d/m/Y') }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
 
-                <!-- Password Update Section (Optional) -->
+                <!-- Password Creation Section -->
                 <div class="bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden">
                     <div class="bg-gradient-to-r from-orange-600 to-orange-700 px-6 py-4">
                         <div class="flex items-center">
@@ -378,7 +338,7 @@
                                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                 </path>
                             </svg>
-                            <h3 class="text-lg font-semibold text-white">Đổi mật khẩu (Tùy chọn)</h3>
+                            <h3 class="text-lg font-semibold text-white">Thiết lập mật khẩu</h3>
                         </div>
                     </div>
 
@@ -393,8 +353,8 @@
                                 </svg>
                                 <div>
                                     <p class="text-sm text-yellow-800 font-medium">Lưu ý về mật khẩu</p>
-                                    <p class="text-xs text-yellow-700 mt-1">Chỉ nhập mật khẩu mới nếu bạn muốn thay
-                                        đổi. Để trống nếu giữ nguyên mật khẩu hiện tại.</p>
+                                    <p class="text-xs text-yellow-700 mt-1">Mật khẩu cần tối thiểu 8 ký tự, bao gồm chữ
+                                        hoa, chữ thường, số và ký tự đặc biệt.</p>
                                 </div>
                             </div>
                         </div>
@@ -407,11 +367,11 @@
                                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                     </path>
                                 </svg>
-                                Mật khẩu mới
+                                Mật khẩu <span class="text-red-500">*</span>
                             </label>
-                            <input type="password" name="password"
+                            <input type="password" name="password" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-gray-50 focus:bg-white"
-                                placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)">
+                                placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)">
                             @error('password')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -425,9 +385,9 @@
                                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                     </path>
                                 </svg>
-                                Xác nhận mật khẩu
+                                Xác nhận mật khẩu <span class="text-red-500">*</span>
                             </label>
-                            <input type="password" name="password_confirmation"
+                            <input type="password" name="password_confirmation" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-gray-50 focus:bg-white"
                                 placeholder="Nhập lại mật khẩu để xác nhận">
                             @error('password_confirmation')
@@ -467,14 +427,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                Cập nhật thông tin
+                                Thêm bệnh nhân
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hidden field for tracking who updated -->
-                <input type="hidden" name="updated_by" value="{{ auth()->id() }}">
+                <!-- Hidden field for tracking who created -->
+                <input type="hidden" name="created_by" value="{{ auth()->id() }}">
             </form>
 
             <!-- Additional Information Panel -->
@@ -488,10 +448,9 @@
                     <div>
                         <h4 class="text-lg font-semibold text-blue-900 mb-2">Lưu ý quan trọng</h4>
                         <ul class="text-sm text-blue-800 space-y-1">
-                            <li>• Vui lòng kiểm tra kỹ thông tin trước khi cập nhật</li>
-                            <li>• Số CCCD và họ tên là thông tin bắt buộc</li>
+                            <li>• Vui lòng kiểm tra kỹ thông tin trước khi thêm mới</li>
+                            <li>• Số CCCD, họ tên và mật khẩu là thông tin bắt buộc</li>
                             <li>• Thông tin bảo hiểm y tế giúp thuận tiện trong việc thanh toán viện phí</li>
-                            <li>• Mật khẩu chỉ cần nhập khi muốn thay đổi</li>
                             <li>• Ảnh đại diện nên có kích thước nhỏ hơn 2MB</li>
                         </ul>
                     </div>
@@ -527,10 +486,24 @@
         document.querySelector('form').addEventListener('submit', function(e) {
             const nationalId = document.querySelector('input[name="national_id"]').value;
             const fullName = document.querySelector('input[name="full_name"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const passwordConfirmation = document.querySelector('input[name="password_confirmation"]').value;
 
             if (!nationalId.trim() || !fullName.trim()) {
                 e.preventDefault();
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc (Số CCCD và Họ tên)');
+                return false;
+            }
+
+            if (!password.trim() || !passwordConfirmation.trim()) {
+                e.preventDefault();
+                alert('Vui lòng điền đầy đủ mật khẩu và xác nhận mật khẩu');
+                return false;
+            }
+
+            if (password !== passwordConfirmation) {
+                e.preventDefault();
+                alert('Mật khẩu và xác nhận mật khẩu không khớp');
                 return false;
             }
 
@@ -542,7 +515,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Đang cập nhật...
+                Đang thêm...
             `;
         });
     </script>

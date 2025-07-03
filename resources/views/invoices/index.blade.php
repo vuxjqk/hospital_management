@@ -141,17 +141,24 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($invoice->status)
+                                        @if ($invoice->status === 'paid')
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <i class="fas fa-check-circle mr-1"></i>
                                                 Đã thanh toán
                                             </span>
-                                        @else
+                                        @elseif ($invoice->status === 'unpaid')
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                 <i class="fas fa-times-circle mr-1"></i>
                                                 Chưa thanh toán
+                                            </span>
+                                        @else
+                                            {{-- trạng thái còn lại là cancelled --}}
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700">
+                                                <i class="fas fa-ban mr-1"></i>
+                                                Đã huỷ
                                             </span>
                                         @endif
                                     </td>
@@ -173,7 +180,7 @@
                                                 Chi tiết
                                             </a>
 
-                                            @if (!$invoice->status)
+                                            @if ($invoice->status === 'unpaid')
                                                 <form action="{{ route('invoices.update', $invoice) }}" method="POST"
                                                     class="inline">
                                                     @csrf
@@ -185,11 +192,18 @@
                                                         Thanh toán
                                                     </button>
                                                 </form>
-                                            @else
+                                            @elseif ($invoice->status === 'paid')
                                                 <button
                                                     class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed">
                                                     <i class="fas fa-check mr-2"></i>
                                                     Đã thanh toán
+                                                </button>
+                                            @else
+                                                {{-- cancelled --}}
+                                                <button
+                                                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed">
+                                                    <i class="fas fa-ban mr-2"></i>
+                                                    Đã huỷ
                                                 </button>
                                             @endif
 

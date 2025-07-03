@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,10 +57,18 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $invoice->update([
-            'status' => 1,
+            'status' => 'paid',
             'paid_by' => Auth::id(),
             'paid_at' => now(),
         ]);
+
+        $detail = $invoice->details[0];
+
+        $appointment = Appointment::find($detail->item_id);
+        $appointment->update([
+            'is_paid' => 1,
+        ]);
+
         return redirect()->route('invoices.index')->with('success', 'Đã thanh toán hoá đơn.');
     }
 

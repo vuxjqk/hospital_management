@@ -17,4 +17,14 @@ class Examination extends Model
         'status',
         'examined_at',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function specialty()
+    {
+        return $this->belongsTo(Specialty::class);
+    }
 }

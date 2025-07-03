@@ -120,27 +120,33 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        @if ($appointment->examination_id == null)
-                                            <form action="{{ route('examinations.store') }}" method="POST"
-                                                onsubmit="return confirm('Xác nhận tiến hành khám bệnh');">
-                                                @csrf
+                                        @if ($appointment->is_paid)
+                                            @if ($appointment->examination_id == null)
+                                                <form action="{{ route('examinations.store') }}" method="POST"
+                                                    onsubmit="return confirm('Xác nhận tiến hành khám bệnh');">
+                                                    @csrf
 
-                                                <input type="hidden" name="appointment_id"
-                                                    value="{{ $appointment->id }}">
+                                                    <input type="hidden" name="appointment_id"
+                                                        value="{{ $appointment->id }}">
 
-                                                <input type="hidden" name="patient_id"
-                                                    value="{{ $appointment->patient_id }}">
+                                                    <input type="hidden" name="patient_id"
+                                                        value="{{ $appointment->patient_id }}">
 
-                                                <input type="hidden" name="specialty_id"
-                                                    value="{{ $appointment->specialty_id }}">
+                                                    <input type="hidden" name="specialty_id"
+                                                        value="{{ $appointment->specialty_id }}">
 
-                                                <button type="submit"
-                                                    class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">Khám</button>
-                                            </form>
+                                                    <button type="submit"
+                                                        class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">Khám</button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('examinations.edit', $appointment->examination) }}"
+                                                    class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200 text-decoration-none">Đang
+                                                    khám</a>
+                                            @endif
                                         @else
-                                            <a href="{{ route('examinations.edit', $appointment->examination) }}"
-                                                class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200 text-decoration-none">Đang
-                                                khám</a>
+                                            <span
+                                                class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">Chưa
+                                                thanh toán</span>
                                         @endif
                                     </td>
                                 </tr>

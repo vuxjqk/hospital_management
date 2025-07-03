@@ -73,7 +73,7 @@ class PatientController extends Controller
 
         Patient::create($validated);
 
-        return redirect()->back()->with('success', 'Bệnh nhân đã được thêm.');
+        return redirect()->route('patients.index')->with('success', 'Bệnh nhân đã được thêm.');
     }
 
     /**
@@ -126,7 +126,7 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return redirect()->back()->with('success', 'Bệnh nhân đã được cập nhật.');
+        return redirect()->route('patients.index')->with('success', 'Bệnh nhân đã được cập nhật.');
     }
 
     /**

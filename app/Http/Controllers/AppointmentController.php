@@ -44,6 +44,28 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'specialty_id' => 'required|exists:specialties,id',
+            'has_insurance' => 'nullable|boolean',
+        ]);
+
+        $patient = Patient::find($request->patient_id);
+
+        if ($request->has_insurance) {
+            if (!$patient->insurance_number) {
+                return redirect()->back()
+                    ->withErrors(['has_insurance' => 'Bệnh nhân không có bảo hiểm y tế.'])
+                    ->withInput()->with('open_modal', 'exampleModal');
+            }
+
+            if (!$patient->insurance_expiry_date || $patient->insurance_expiry_date < now()->toDateString()) {
+                return redirect()->back()
+                    ->withErrors(['has_insurance' => 'Bảo hiểm y tế đã hết hạn.'])
+                    ->withInput()->withInput()->with('open_modal', 'exampleModal');
+            }
+        }
+
         $today = today();
 
         // Tính số thứ tự trong ngày cho chuyên khoa
@@ -111,6 +133,28 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'specialty_id' => 'required|exists:specialties,id',
+            'has_insurance' => 'nullable|boolean',
+        ]);
+
+        $patient = Patient::find($request->patient_id);
+
+        if ($request->has_insurance) {
+            if (!$patient->insurance_number) {
+                return redirect()->back()
+                    ->withErrors(['has_insurance' => 'Bệnh nhân không có bảo hiểm y tế.'])
+                    ->withInput()->with('open_modal', 'editAppointmentModal');
+            }
+
+            if (!$patient->insurance_expiry_date || $patient->insurance_expiry_date < now()->toDateString()) {
+                return redirect()->back()
+                    ->withErrors(['has_insurance' => 'Bảo hiểm y tế đã hết hạn.'])
+                    ->withInput()->with('open_modal', 'editAppointmentModal');
+            }
+        }
+
         $today = today();
 
         // Lấy lịch hẹn cần cập nhật

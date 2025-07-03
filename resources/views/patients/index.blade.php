@@ -280,40 +280,52 @@
                         <input type="hidden" name="patient_id" id="selectedId">
 
                         <div class="mb-4">
-                            <label for="specialty_id" class="form-label font-medium text-gray-700">Chọn Chuyên Khoa
-                                *</label>
+                            <label for="specialty_id" class="form-label font-medium text-gray-700">
+                                Chọn Chuyên Khoa *
+                            </label>
                             <select class="form-select border-gray-300 focus:ring-emerald-500 focus:border-emerald-500"
                                 name="specialty_id" required>
                                 <option value="">Chọn chuyên khoa</option>
                                 @foreach ($specialties as $specialty)
-                                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                    <option value="{{ $specialty->id }}"
+                                        {{ old('specialty_id') == $specialty->id ? 'selected' : '' }}>
+                                        {{ $specialty->name }}
+                                    </option>
                                 @endforeach
                             </select>
+                            @error('specialty_id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <div class="form-check">
                                 <input class="form-check-input text-emerald-600 focus:ring-emerald-500"
-                                    type="checkbox" value="1" id="checkDefault" name="has_insurance">
+                                    type="checkbox" value="1" id="checkDefault" name="has_insurance"
+                                    {{ old('has_insurance') ? 'checked' : '' }}>
                                 <label class="form-check-label font-medium text-gray-700" for="checkDefault">
                                     Sử dụng bảo hiểm y tế
                                 </label>
                             </div>
+                            @error('has_insurance')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                    </div>
-                    <div class="modal-footer bg-gray-50 border-0">
-                        <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
-                            data-bs-dismiss="modal">
-                            Hủy Bỏ
-                        </button>
-                        <button type="submit"
-                            class="btn btn-success bg-emerald-600 border-emerald-600 hover:bg-emerald-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                            Đặt Lịch Hẹn
-                        </button>
+
+                        <div class="modal-footer bg-gray-50 border-0">
+                            <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
+                                data-bs-dismiss="modal">
+                                Hủy Bỏ
+                            </button>
+                            <button type="submit"
+                                class="btn btn-success bg-emerald-600 border-emerald-600 hover:bg-emerald-700">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                Đặt Lịch Hẹn
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -353,6 +365,9 @@
                                     <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
                                 @endforeach
                             </select>
+                            @error('specialty->id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
@@ -363,6 +378,9 @@
                                     Sử dụng bảo hiểm y tế
                                 </label>
                             </div>
+                            @error('has_insurance')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer bg-gray-50 border-0">
@@ -441,4 +459,14 @@
             border-radius: 0 0 0.75rem 0.75rem;
         }
     </style>
+
+    @if ($errors->any() && session('open_modal'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modalId = "{{ session('open_modal') }}";
+                const modal = new bootstrap.Modal(document.getElementById(modalId));
+                modal.show();
+            });
+        </script>
+    @endif
 </x-app-layout>

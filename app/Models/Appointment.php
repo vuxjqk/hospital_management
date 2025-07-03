@@ -11,6 +11,7 @@ class Appointment extends Model
         'specialty_id',
         'queue_number',
         'has_insurance',
+        'examination_id',
         'updated_by'
     ];
 

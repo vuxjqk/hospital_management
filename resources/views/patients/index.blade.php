@@ -73,7 +73,7 @@
                                         </div>
                                         <input type="search" name="search"
                                             class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-l-lg rounded-r-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 text-sm"
-                                            placeholder="Tìm kiếm theo tên bệnh nhân..." value="{{ $search }}">
+                                            placeholder="Tìm kiếm bệnh nhân..." value="{{ $search }}">
                                     </div>
                                 </div>
                                 <button type="submit"
@@ -105,15 +105,18 @@
                                             </svg>
                                             CMND/CCCD: <span class="font-medium">{{ $patient->national_id }}</span>
                                         </p>
-                                        <p class="text-xs text-gray-500 flex items-center">
-                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                            </svg>
-                                            BH: {{ $patient->insurance_number }} - HH:
-                                            {{ date('d/m/Y', strtotime($patient->insurance_expiry_date)) }}
-                                        </p>
+                                        @if ($patient->insurance_number != null)
+                                            <p class="text-xs text-gray-500 flex items-center">
+                                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                                </svg>
+                                                BH: {{ $patient->insurance_number }} - HH:
+                                                {{ date('d/m/Y', strtotime($patient->insurance_expiry_date)) }}
+                                            </p>
+                                        @endif
                                     </div>
                                 </button>
                                 <div class="px-4 pb-3">
@@ -163,10 +166,6 @@
                                 <tr>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        CMND/CCCD
-                                    </th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Họ và Tên
                                     </th>
                                     <th
@@ -175,7 +174,11 @@
                                     </th>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Trạng Thái
+                                        Số Thứ Tự
+                                    </th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Có Bảo Hiểm
                                     </th>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -186,11 +189,6 @@
                             <tbody class="divide-y divide-gray-200">
                                 @forelse ($appointments as $appointment)
                                     <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{ $appointment->patient->national_id }}
-                                            </div>
-                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-10 w-10">
@@ -203,6 +201,8 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-900">
+                                                        {{ $appointment->patient->national_id }}
+                                                        <br>
                                                         {{ $appointment->patient->full_name }}
                                                     </div>
                                                 </div>
@@ -216,18 +216,24 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
+                                                class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                {{ $appointment->queue_number }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
                                                 class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                Chờ khám
+                                                {{ $appointment->has_insurance ? 'Có' : 'Không' }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                            <button
+                                            <button data-bs-toggle="modal" data-bs-target="#editAppointmentModal"
+                                                data-patient-id="{{ $appointment->patient_id }}"
+                                                data-appointment-id="{{ $appointment->id }}"
+                                                data-specialty-id="{{ $appointment->specialty->id }}"
+                                                data-has-insurance="{{ $appointment->has_insurance }}"
                                                 class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors duration-200">
-                                                Xem
-                                            </button>
-                                            <button
-                                                class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">
-                                                Khám
+                                                Sửa
                                             </button>
                                         </td>
                                     </tr>
@@ -314,6 +320,69 @@
         </div>
     </form>
 
+    <!-- Edit Appointment Modal -->
+    <div class="modal fade" id="editAppointmentModal" tabindex="-1" aria-labelledby="editAppointmentModalLabel"
+        aria-hidden="true">
+        <form action="{{ route('appointments.update', ':appointmentId') }}" method="POST">
+            @method('PUT')
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content border-0 shadow-2xl">
+                    <div class="modal-header bg-gradient-to-r from-blue-600 to-blue-700 text-white border-0">
+                        <h1 class="modal-title fs-5 font-semibold flex items-center" id="editAppointmentModalLabel">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Chỉnh Sửa Lịch Hẹn
+                        </h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-6">
+                        @csrf
+                        <input type="hidden" name="patient_id" id="editSelectedId">
+                        <input type="hidden" name="appointment_id" id="editAppointmentId">
+
+                        <div class="mb-4">
+                            <label for="edit_specialty_id" class="form-label font-medium text-gray-700">Chọn Chuyên
+                                Khoa *</label>
+                            <select class="form-select border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                                name="specialty_id" id="edit_specialty_id" required>
+                                <option value="">Chọn chuyên khoa</option>
+                                @foreach ($specialties as $specialty)
+                                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input text-blue-600 focus:ring-blue-500" type="checkbox"
+                                    value="1" id="editCheckDefault" name="has_insurance">
+                                <label class="form-check-label font-medium text-gray-700" for="editCheckDefault">
+                                    Sử dụng bảo hiểm y tế
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-gray-50 border-0">
+                        <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
+                            data-bs-dismiss="modal">
+                            Hủy Bỏ
+                        </button>
+                        <button type="submit" class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Cập Nhật Lịch Hẹn
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var exampleModal = document.getElementById('exampleModal');
@@ -324,21 +393,40 @@
                 input.value = patientId;
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var editModal = document.getElementById('editAppointmentModal');
+            editModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var patientId = button.getAttribute('data-patient-id');
+                var appointmentId = button.getAttribute('data-appointment-id');
+                var specialtyId = button.getAttribute('data-specialty-id');
+                var hasInsurance = button.getAttribute('data-has-insurance') === '1';
+
+                var patientInput = editModal.querySelector('#editSelectedId');
+                var appointmentInput = editModal.querySelector('#editAppointmentId');
+                var specialtySelect = editModal.querySelector('#edit_specialty_id');
+                var insuranceCheckbox = editModal.querySelector('#editCheckDefault');
+
+                patientInput.value = patientId;
+                appointmentInput.value = appointmentId;
+                specialtySelect.value = specialtyId;
+                insuranceCheckbox.checked = hasInsurance;
+
+                // Replace :appointmentId in form action
+                var form = editModal.querySelector('form');
+                form.action = form.action.replace(':appointmentId', appointmentId);
+            });
+        });
     </script>
 
     <style>
-        .form-control:focus,
         .form-select:focus {
             box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
         }
 
         .btn:focus {
             box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
-        }
-
-        .table th {
-            font-weight: 600;
-            letter-spacing: 0.05em;
         }
 
         .modal-content {

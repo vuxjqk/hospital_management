@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('specialties', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->unsignedBigInteger('fee')->default(0);
+            $table->string('name')->unique();
+            $table->unsignedBigInteger('fee');
             $table->boolean('is_active')->default(true);
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();

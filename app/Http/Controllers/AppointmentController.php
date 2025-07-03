@@ -109,9 +109,60 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Appointment $appointment)
+    public function update(Request $request, $id)
     {
-        //
+        $today = today();
+
+        // Lấy lịch hẹn cần cập nhật
+        $appointment = Appointment::findOrFail($id);
+
+        // Tính lại số thứ tự nếu chuyên khoa thay đổi
+        $queueNumber = $appointment->specialty_id == $request->specialty_id
+            ? $appointment->queue_number
+            : Appointment::where('specialty_id', $request->specialty_id)
+            ->whereDate('created_at', $today)
+            ->where('id', '!=', $id)
+            ->count() + 1;
+
+        // Lấy thông tin chuyên khoa để tính phí
+        $specialty = Specialty::findOrFail($request->specialty_id);
+
+        // Xác định xem bệnh nhân có bảo hiểm không
+        $has_insurance = $request->boolean('has_insurance');
+
+        // Cập nhật lịch hẹn
+        $appointment->update([
+            'patient_id' => $request->patient_id,
+            'specialty_id' => $request->specialty_id,
+            'queue_number' => $queueNumber,
+            'has_insurance' => $has_insurance,
+            'updated_by' => Auth::id(),
+        ]);
+
+        // Tìm hóa đơn liên quan
+        $invoice = Invoice::whereHas('details', function ($query) use ($appointment) {
+            $query->where('item_type', 'Khám bệnh')
+                ->where('item_id', $appointment->id);
+        })->firstOrFail();
+
+        // Cập nhật chi tiết hóa đơn
+        $invoiceDetail = InvoiceDetail::where('invoice_id', $invoice->id)
+            ->where('item_type', 'Khám bệnh')
+            ->where('item_id', $appointment->id)
+            ->firstOrFail();
+
+        $invoiceDetail->update([
+            'unit_price' => $specialty->fee,
+            'total_price' => $specialty->fee,
+        ]);
+
+        // Cập nhật tổng số tiền hóa đơn
+        $invoice->update([
+            'total_amount' => $specialty->fee,
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('patients.index')->with('success', 'Lịch khám đã được cập nhật.');
     }
 
     /**

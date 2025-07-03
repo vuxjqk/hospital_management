@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoice_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
-            $table->string('item_type', 100);
+            $table->string('item_type');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('unit_price');
             $table->unsignedTinyInteger('quantity');

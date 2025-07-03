@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('diagnosis')->nullable();
             $table->text('treatment')->nullable();
             $table->text('note')->nullable();
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

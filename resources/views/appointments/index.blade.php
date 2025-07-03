@@ -59,15 +59,15 @@
                             <tr>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    CMND/CCCD
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Họ và Tên
                                 </th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Chuyên Khoa
+                                </th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Số Thứ Tự
                                 </th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -83,11 +83,6 @@
                             @forelse ($appointments as $appointment)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{ $appointment->patient->national_id }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 <div
@@ -99,7 +94,9 @@
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">
-                                                    {{ $appointment->patient->name }}
+                                                    {{ $appointment->patient->national_id }}
+                                                    <br>
+                                                    {{ $appointment->patient->full_name }}
                                                 </div>
                                             </div>
                                         </div>
@@ -112,28 +109,38 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span
+                                            class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            {{ $appointment->queue_number }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
                                             class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                             Chờ khám
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        <button
-                                            class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition-colors duration-200">
-                                            Xem
-                                        </button>
-                                        @if ($appointment->examination == null)
-                                            <form action="{{ route('examinations.store') }}" method="POST">
+                                        @if ($appointment->examination_id == null)
+                                            <form action="{{ route('examinations.store') }}" method="POST"
+                                                onsubmit="return confirm('Xác nhận tiến hành khám bệnh');">
                                                 @csrf
-                                                <button
-                                                    class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">
-                                                    Khám
-                                                </button>
+
+                                                <input type="hidden" name="appointment_id"
+                                                    value="{{ $appointment->id }}">
+
+                                                <input type="hidden" name="patient_id"
+                                                    value="{{ $appointment->patient_id }}">
+
+                                                <input type="hidden" name="specialty_id"
+                                                    value="{{ $appointment->specialty_id }}">
+
+                                                <button type="submit"
+                                                    class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">Khám</button>
                                             </form>
                                         @else
                                             <a href="{{ route('examinations.edit', $appointment->examination) }}"
-                                                class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200">
-                                                Đang khám
-                                            </a>
+                                                class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-md transition-colors duration-200 text-decoration-none">Đang
+                                                khám</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -156,203 +163,4 @@
             </div>
         </div>
     </div>
-    </div>
-
-    <!-- Add Patient Modal -->
-    <form action="{{ route('patients.store') }}" method="POST">
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                <div class="modal-content border-0 shadow-2xl">
-                    <div class="modal-header bg-gradient-to-r from-blue-600 to-blue-700 text-white border-0">
-                        <h1 class="modal-title fs-5 font-semibold flex items-center" id="staticBackdropLabel">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                            </svg>
-                            Thêm Bệnh Nhân Mới
-                        </h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-6">
-                        @csrf
-
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label for="national_id" class="form-label font-medium text-gray-700">CMND/CCCD
-                                    *</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="national_id" name="national_id" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="name" class="form-label font-medium text-gray-700">Họ và Tên *</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="name" name="name" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="date_of_birth" class="form-label font-medium text-gray-700">Ngày Sinh
-                                    *</label>
-                                <input type="date"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="date_of_birth" name="date_of_birth" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="gender" class="form-label font-medium text-gray-700">Giới Tính *</label>
-                                <select class="form-select border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="gender" name="gender" required>
-                                    <option value="">Chọn giới tính</option>
-                                    <option value="male">Nam</option>
-                                    <option value="female">Nữ</option>
-                                    <option value="other">Khác</option>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="address" class="form-label font-medium text-gray-700">Địa Chỉ *</label>
-                                <textarea class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500" id="address"
-                                    name="address" rows="3" required></textarea>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="insurance_number" class="form-label font-medium text-gray-700">Số Bảo Hiểm
-                                    *</label>
-                                <input type="text"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_number" name="insurance_number" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="insurance_expiry_date" class="form-label font-medium text-gray-700">Ngày
-                                    Hết Hạn BH *</label>
-                                <input type="date"
-                                    class="form-control border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                    id="insurance_expiry_date" name="insurance_expiry_date" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-gray-50 border-0">
-                        <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
-                            data-bs-dismiss="modal">
-                            Hủy Bỏ
-                        </button>
-                        <button type="submit" class="btn btn-primary bg-blue-600 border-blue-600 hover:bg-blue-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            Thêm Bệnh Nhân
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <!-- Add Appointment Modal -->
-    <form action="{{ route('appointments.store') }}" method="POST">
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content border-0 shadow-2xl">
-                    <div class="modal-header bg-gradient-to-r from-emerald-600 to-emerald-700 text-white border-0">
-                        <h1 class="modal-title fs-5 font-semibold flex items-center" id="exampleModalLabel">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            Đặt Lịch Khám Bệnh
-                        </h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-6">
-                        @csrf
-                        <input type="hidden" name="patient_id" id="selectedId">
-
-                        <div class="mb-4">
-                            <label for="specialty_id" class="form-label font-medium text-gray-700">Chọn Chuyên Khoa
-                                *</label>
-                            <select class="form-select border-gray-300 focus:ring-emerald-500 focus:border-emerald-500"
-                                name="specialty_id" required>
-                                <option value="">Chọn chuyên khoa</option>
-                                @foreach ($specialties as $specialty)
-                                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="form-check">
-                                <input class="form-check-input text-emerald-600 focus:ring-emerald-500"
-                                    type="checkbox" value="1" id="checkDefault" name="has_insurance">
-                                <label class="form-check-label font-medium text-gray-700" for="checkDefault">
-                                    Sử dụng bảo hiểm y tế
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-gray-50 border-0">
-                        <button type="button" class="btn btn-light border border-gray-300 text-gray-700"
-                            data-bs-dismiss="modal">
-                            Hủy Bỏ
-                        </button>
-                        <button type="submit"
-                            class="btn btn-success bg-emerald-600 border-emerald-600 hover:bg-emerald-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                            Đặt Lịch Hẹn
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var exampleModal = document.getElementById('exampleModal');
-            exampleModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var patientId = button.getAttribute('data-patient-id');
-                var input = exampleModal.querySelector('#selectedId');
-                input.value = patientId;
-            });
-        });
-    </script>
-
-    <style>
-        .form-control:focus,
-        .form-select:focus {
-            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
-        }
-
-        .btn:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
-        }
-
-        .table th {
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .modal-content {
-            border-radius: 0.75rem;
-        }
-
-        .modal-header {
-            border-radius: 0.75rem 0.75rem 0 0;
-        }
-
-        .modal-footer {
-            border-radius: 0 0 0.75rem 0.75rem;
-        }
-    </style>
 </x-app-layout>

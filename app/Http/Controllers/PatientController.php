@@ -19,7 +19,9 @@ class PatientController extends Controller
         $search = $request->input('search');
 
         $patients = Patient::when($search, function ($query, $search) {
-            return $query->where('full_name', 'like', "%{$search}%");
+            return $query->where('full_name', 'like', "%{$search}%")
+                ->orWhere('national_id', 'like', "%{$search}%")
+                ->orWhere('insurance_number', 'like', "%{$search}%");
         })->paginate(10);
 
         $appointments = Appointment::paginate(10);
@@ -71,7 +73,7 @@ class PatientController extends Controller
 
         Patient::create($validated);
 
-        return redirect()->back()->with('success', 'Thêm bệnh nhân thành công.');
+        return redirect()->back()->with('success', 'Bệnh nhân đã được thêm.');
     }
 
     /**
@@ -124,7 +126,7 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return redirect()->back()->with('success', 'Cập nhật bệnh nhân thành công.');
+        return redirect()->back()->with('success', 'Bệnh nhân đã được cập nhật.');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Examination;
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,17 +23,25 @@ class ExaminationController extends Controller
      */
     public function create()
     {
-        //
+        return view('examinations.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Appointment $appointment)
     {
         $examination = Examination::create([
+            'patient_id' => $request->patient_id,
+            'specialty_id' => $request->specialty_id,
             'user_id' => Auth::id(),
             'examined_at' => now(),
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+
+        $appointment->update([
+            'examination_id' => $examination->id,
         ]);
 
         return redirect()->route('examinations.edit', $examination)->with('success', 'Bắt đầu khám bệnh.');
@@ -62,7 +71,9 @@ class ExaminationController extends Controller
         $examination->update([
             'symptoms' => $request->symptoms,
             'diagnosis' => $request->diagnosis,
+            'treatment' => $request->treatment,
             'note' => $request->note,
+            'status' => 'completed',
         ]);
 
         return redirect()->route('appointments.index')->with('success', 'Đã khám bệnh.');
